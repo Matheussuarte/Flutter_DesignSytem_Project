@@ -2,16 +2,25 @@ import 'package:flutter/material.dart';
 
 import '../common/routes/app_routes.dart';
 
+import '../components/app_navigation_bar/app_navigation_bar_factory.dart';
+
 import '../components/search_bar/search_bar_factory.dart';
 import '../components/search_bar/search_bar_viewmodel.dart';
 
 import '../components/typography/typography_factory.dart';
 import '../components/typography/typography_viewmodel.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({
     super.key,
   });
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int currentNavigationIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +61,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
 
-            _buildBottomNavigation(),
+            _buildBottomNavigation(context),
           ],
         ),
       ),
@@ -225,52 +234,20 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomNavigation() {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        border: Border(
-          top: BorderSide(
-            color: Color(0xFFF1F5F9),
-          ),
-        ),
-      ),
+  Widget _buildBottomNavigation(BuildContext context) {
+    return AppNavigationBarFactory.fourItems(
+      currentIndex: currentNavigationIndex,
 
-      child: BottomNavigationBar(
-        currentIndex: 0,
+      onSelected: (index) {
+        setState(() {
+          currentNavigationIndex = index;
+        });
 
-        type: BottomNavigationBarType.fixed,
-
-        selectedItemColor: const Color(0xFF1746A2),
-
-        unselectedItemColor: const Color(0xFFD1D5DB),
-
-        showSelectedLabels: false,
-
-        showUnselectedLabels: false,
-
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-
-          BottomNavigationBarItem(
-            icon: Icon(Icons.psychology),
-            label: 'Learning',
-          ),
-
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat_bubble),
-            label: 'Messages',
-          ),
-
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-      ),
+        Navigator.pushNamed(
+          context,
+          AppRoutes.appNavigationBarSample,
+        );
+      },
     );
   }
 }
